@@ -82,7 +82,7 @@
         android:layout_alignParentBottom="true"
         ads:adSize="SMART_BANNER"
         android:layout_gravity="bottom"
-        ads:adUnitId="@string/smart_banner" >
+        ads:adUnitId="@string/smart_banner">
     </com.google.android.gms.ads.AdView>
     <ScrollView
         android:layout_width="fill_parent"

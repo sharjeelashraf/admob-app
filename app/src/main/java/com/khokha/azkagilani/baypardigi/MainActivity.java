@@ -59,7 +59,6 @@ public class MainActivity extends Activity {
           interAd = new InterstitialAd(this);
 
             interAd.setAdUnitId(getString(R.string.interstitial_ad));
-            //Google ad unit
             //interAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
 
             ///Create Ad
