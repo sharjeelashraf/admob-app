@@ -3,50 +3,67 @@ package com.khokha.azkagilani.baypardigi;
         import com.google.android.gms.ads.AdRequest;
         import com.google.android.gms.ads.InterstitialAd;
         import com.google.android.gms.ads.AdView;
+        import com.google.android.gms.ads.NativeExpressAdView;
+        import com.google.android.gms.ads.VideoController;
+        import com.google.android.gms.ads.VideoOptions;
+
 
         import android.app.Activity;
         import android.content.DialogInterface;
         import android.content.Intent;
         import android.content.res.Resources;
+        import android.graphics.Bitmap;
         import android.net.Uri;
         import android.os.Bundle;
         import android.os.CountDownTimer;
+        import android.os.Environment;
         import android.os.Handler;
         import android.support.v7.app.AlertDialog;
+        import android.util.Log;
         import android.view.View;
         import android.webkit.WebView;
+        import android.widget.Button;
         import android.widget.EditText;
+        import android.widget.ImageView;
         import android.widget.Toast;
 
+        import java.io.ByteArrayOutputStream;
         import java.io.File;
+        import java.io.FileNotFoundException;
+        import java.io.FileOutputStream;
+        import java.io.IOException;
         import java.util.Timer;
         import java.util.TimerTask;
+
 
 public class MainActivity extends Activity {
     int currentImage;
     private InterstitialAd interAd;
+    VideoController mVideoController;
+    //NativeExpressAdView mAdView;
     EditText Text1;
+    private static String LOG_TAG = "EXAMPLE";
     String[] images;
     String html;
     int count = 0;
 
-    Timer buttonTimer = new Timer();
+
+//    Timer buttonTimer = new Timer();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
+//Native ad
 
-
-
-            interAd = new InterstitialAd(this);
+          interAd = new InterstitialAd(this);
 
             interAd.setAdUnitId(getString(R.string.interstitial_ad));
             //Google ad unit
             //interAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
 
             ///Create Ad
-            requestad();
+          requestad();
 
             interAd.setAdListener(new AdListener() {
                 //public void onAdLoaded() {
@@ -103,7 +120,8 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+
+        /*AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
         alert.setTitle("Rate Us:");
 
         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -124,19 +142,39 @@ public class MainActivity extends Activity {
                 // TODO Auto-generated method stub
                 finish();
             }
-        });
+        }
         alert.create();
-        alert.show();
+        alert.show(););*/
+        Toast.makeText(MainActivity.this, "Rate us please" , Toast.LENGTH_SHORT).show();
+        finish();
+
     }
     public void requestad()
     {
-
+        NativeExpressAdView mAdView2 = (NativeExpressAdView)findViewById(R.id.adView2);
         AdView mAdView = (AdView) findViewById(R.id.adView);
+
         AdRequest adRequest = new AdRequest.Builder().build();
 
         interAd.loadAd(adRequest);
-        mAdView.loadAd(adRequest);
+       mAdView.loadAd(adRequest);
+        mAdView2.loadAd(adRequest);
 
+
+
+        mAdView2.setVideoOptions(new VideoOptions.Builder().setStartMuted(true).build());
+
+
+        VideoController vc = mAdView2.getVideoController();
+
+        vc.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
+            public void onVideoEnd() {
+                // Here apps can take action knowing video playback is finished
+                // It's always a good idea to wait for playback to complete before
+                // replacing or refreshing a native ad, for example.
+                super.onVideoEnd();
+            }
+        });
     }
 
     public void displayInterstitial()
@@ -147,6 +185,9 @@ public class MainActivity extends Activity {
         }
     }
 
+    //screenshot
+
+
     //saved instance
     @Override
     protected void onSaveInstanceState (Bundle outState)
@@ -154,6 +195,7 @@ public class MainActivity extends Activity {
         outState.putInt("message", currentImage );
 
     }
+//screen//
 
     public void onSearch (View view){
 
@@ -183,7 +225,7 @@ public class MainActivity extends Activity {
     {
 
         count++;
-        if (count>4)
+        if (count>5)
         {
             count =0;
 
@@ -205,7 +247,7 @@ public class MainActivity extends Activity {
     public void onClickminus (View view)
     {
         count++;
-        if (count>4)
+        if (count>5)
         {
             count =0;
 
@@ -227,7 +269,7 @@ public class MainActivity extends Activity {
         int i;
         currentImage = 0;
 //CODE REPLACE
-        images = new String[100];
+        images = new String[30];
         try
 
         {
@@ -248,7 +290,7 @@ public class MainActivity extends Activity {
     {
         Toast.makeText(MainActivity.this, "Error "+ ex, Toast.LENGTH_SHORT).show();
     }
-    };
+    }
     public void WebView()
     {
 
